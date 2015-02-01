@@ -25,7 +25,6 @@ function _bundle () {
 
     local repo_replaced_slash=$(echo $repo | sed -e s./.#.g)
 
-    cd $_PUMICE_PLUGINS_INSTALL_DIRECTORY
     if [[ ! -d "$_PUMICE_PLUGINS_INSTALL_DIRECTORY/$repo_replaced_slash" ]]; then
         git clone "https://github.com/$repo" "$_PUMICE_PLUGINS_INSTALL_DIRECTORY/$repo_replaced_slash"
     fi
@@ -51,8 +50,7 @@ function _remove () {
 }
 
 function _list() {
-    cd $_PUMICE_PLUGINS_INSTALL_DIRECTORY
-    ls | sed |
+    ls $_PUMICE_PLUGINS_INSTALL_DIRECTORY| sed |
         while read repo_dir; do
             echo $repo_dir | sed -e s.#./.g
         done
