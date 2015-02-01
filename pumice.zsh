@@ -38,10 +38,10 @@ function _bundle () {
 }
 
 function _update () {
-    cd $_PUMICE_PLUGINS_INSTALL_DIRECTORY
-    ls | sed |
-        while read $repo_dir; do
-            cd $repo_dir && git pull
+    ls $_PUMICE_PLUGINS_INSTALL_DIRECTORY | sed |
+        while read repo_dir; do
+            echo -e "\e[32mPumice: Try to update: $repo_dir\e[m"
+            cd "$_PUMICE_PLUGINS_INSTALL_DIRECTORY/$repo_dir" && git pull
             cd ../
         done
 }
