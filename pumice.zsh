@@ -46,7 +46,13 @@ function _update () {
 }
 
 function _remove () {
-    echo 'has NOT implemented yet'
+    local repo="$1"
+    local repo_replaced_slash=$(echo $repo | sed -e s./.#.g)
+    if [[ -d $_PUMICE_PLUGINS_INSTALL_DIRECTORY/$repo_replaced_slash ]]; then
+        rm -r $_PUMICE_PLUGINS_INSTALL_DIRECTORY/$repo_replaced_slash
+    else
+        echo -e "\e[31mPumice: Target directory not found: $repo_replaced_slash\e[m"
+    fi
 }
 
 function _list() {
