@@ -88,11 +88,11 @@ function _pumice() {
         'update[update a plugin]' \
         'remove[remove a plugin]' \
         'list[list installed plugins]' \
-        'help[show help]' \
+        'help[show help]'
 }
 
 function _setup_pumice() {
-    export _PUMICE_PLUGINS_INSTALL_DIRECTORY="$(cd "$(dirname "$0")" && pwd)/.pumice"
+    export _PUMICE_PLUGINS_INSTALL_DIRECTORY="$HOME/.pumice"
     if [ ! -d $_PUMICE_PLUGINS_INSTALL_DIRECTORY ]; then
         mkdir -p $_PUMICE_PLUGINS_INSTALL_DIRECTORY
     fi
