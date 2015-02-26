@@ -96,7 +96,6 @@ function _setup_pumice() {
     if [ ! -d $_PUMICE_PLUGINS_INSTALL_DIRECTORY ]; then
         mkdir -p $_PUMICE_PLUGINS_INSTALL_DIRECTORY
     fi
-
-    # compdef _pumice pumice
 }
 _setup_pumice
+compdef _pumice pumice
