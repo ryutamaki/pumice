@@ -22,19 +22,21 @@ function _bundle() {
     local repo=$1
     local target=$2
 
+    # check arguments is passed correctly
     if [[ -z $repo || -z $target ]]; then
         echo -e "\e[33mex) pumice bundle ryutamaki/pumice pumice.zsh\e[m" 1>&2
         return 1
     fi
 
     local repo_replaced_slash=$(echo $repo | sed -e s./.#.g)
+    local dir="$_PUMICE_PLUGINS_INSTALL_DIRECTORY/$repo_replaced_slash"
 
-    if [ ! -d "$_PUMICE_PLUGINS_INSTALL_DIRECTORY/$repo_replaced_slash" ]; then
-        git clone "https://github.com/$repo" "$_PUMICE_PLUGINS_INSTALL_DIRECTORY/$repo_replaced_slash"
+    if [ ! -d $dir ]; then
+        git clone "https://github.com/$repo" $dir
     fi
 
-    if [ -e "$_PUMICE_PLUGINS_INSTALL_DIRECTORY/$repo_replaced_slash/$target" ]; then
-        source "$_PUMICE_PLUGINS_INSTALL_DIRECTORY/$repo_replaced_slash/$target"
+    if [ -e "$dir/$target" ]; then
+        source "$dir/$target"
     else
         echo -e "\e[31mPumice: Target not found: \e[m\e[33m$repo/$target\e[m" 1>&2
         return 1
@@ -57,9 +59,10 @@ function _update() {
 function _remove() {
     local repo=$1
     local repo_replaced_slash=$(echo $repo | sed -e s./.#.g)
+    local dir="$_PUMICE_PLUGINS_INSTALL_DIRECTORY/$repo_replaced_slash"
 
-    if [ -d "$_PUMICE_PLUGINS_INSTALL_DIRECTORY/$repo_replaced_slash" ]; then
-        rm -r "$_PUMICE_PLUGINS_INSTALL_DIRECTORY/$repo_replaced_slash"
+    if [ -d $dir ]; then
+        rm -r $dir
     else
         echo -e "\e[31mPumice: Target directory not found: $repo_replaced_slash\e[m" 1>&2
         return 1
