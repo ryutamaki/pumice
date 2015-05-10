@@ -45,6 +45,39 @@ function _bundle() {
     return 0
 }
 
+function _fpath() {
+    local repo=$1
+    local target=$2
+    local first_load_flag=false
+
+    # check arguments is passed correctly
+    if [[ -z $repo || -z $target ]]; then
+        echo -e "\e[33mex) pumice fpath zsh-users/zsh-completions src\e[m" 1>&2
+        return 1
+    fi
+
+    local repo_replaced_slash=$(echo $repo | sed -e s./.#.g)
+    local dir="$_PUMICE_PLUGINS_INSTALL_DIRECTORY/$repo_replaced_slash"
+
+    if [ ! -d $dir ]; then
+        git clone "https://github.com/$repo" $dir
+        $first_load_flag=true
+    fi
+
+    if [ -e "$dir/$target" ]; then
+        fpath=("$dir/$target" $fpath)
+        if $first_load_flag; then
+            rm -f $HOME/.zcompdump
+        fi
+        compinit
+    else
+        echo -e "\e[31mPumice: Target not found: \e[m\e[33m$repo/$target\e[m" 1>&2
+        return 1
+    fi
+
+    return 0
+}
+
 function _update() {
     ls $_PUMICE_PLUGINS_INSTALL_DIRECTORY | sed |
         while read repo_dir; do
@@ -88,6 +121,7 @@ function _pumice() {
     _values \
         'subcommands' \
         'bundle[load a plugin]' \
+        'fpath[load a completion functions]' \
         'update[update a plugin]' \
         'remove[remove a plugin]' \
         'list[list installed plugins]' \
